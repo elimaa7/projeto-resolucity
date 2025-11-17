@@ -1,4 +1,4 @@
-/* Reset e configurações gerais */
+/* RESET E CONFIGURAÇÕES GERAIS */
 * {
     margin: 0;
     padding: 0;
@@ -7,472 +7,207 @@
 
 body {
     font-family: 'Arial', sans-serif;
-    line-height: 1.6;
     background-color: #f5f5f5;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    line-height: 1.6;
 }
 
-/* Cabeçalho */
+/* HEADER */
 .header {
     background-color: white;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    height: 100px;
 }
 
 .navbar {
     display: flex;
     align-items: center;
-    padding: 1rem 2rem;
     max-width: 1200px;
-    margin: 0 auto;
-    height: 100px;
+    margin: auto;
+    padding: 1rem 2rem;
 }
 
-.logo {
+.logo img {
     height: 70px;
 }
 
 .nome {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 3.5rem;
+    font-size: 3rem;
     font-weight: bold;
     color: rgb(0, 0, 90);
-    height: 100px;
+    margin-left: 10px;
 }
 
 .nav-links {
     display: flex;
-    list-style: none;
     gap: 2rem;
-    float: right;
+    list-style: none;
+    margin-left: auto;
 }
 
 .nav-links a {
     text-decoration: none;
     color: black;
     font-weight: 500;
-    font-family: Arial, Helvetica, sans-serif;
-    transition: opacity 0.3s ease;
+    transition: 0.3s;
 }
 
 .nav-links a:hover {
-    color: darkblue;
-    cursor: pointer;
+    color: rgb(0, 0, 90);
 }
 
-/* Botão menu hamburguer (inicialmente escondido) */
+/* Botão mobile */
 .menu-toggle {
     display: none;
+    font-size: 2rem;
     background: none;
     border: none;
-    font-size: 1.8rem;
+    margin-left: auto;
     cursor: pointer;
     color: rgb(0, 0, 90);
 }
 
-/* Rodapé */
-.footer {
-    background-color: white;
-    border-top: 0 2px 5px rgba(0, 0, 0, 0.1);
-    padding: 2rem 0;
-    text-align: center;
-    width: 100%;
-}
-
-.footer-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    padding: 0 1rem;
-}
-
-.footer-top {
-    font-size: 1rem;
-}
-
-.footer-bottom {
-    font-size: 0.9rem;
-    opacity: 75%;
-}
-
-/* Conteúdo */
+/* CONTEÚDO PRINCIPAL */
 .main-content {
-    padding: 1rem 1.5rem;
-    flex: 1;
-    margin-bottom: 1rem;
-}
-
-/* Formulário e Ícones */
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-    background: white;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-            
- h1 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #2c3e50;
-}
-            
-.contact-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-}
-            
-.form-container {
-    flex: 1;
-    min-width: 300px;
-}
-            
-.info-container {
-    flex: 1;
-    min-width: 300px;
-    background: #ecf0f1;
-    padding: 20px;
-    border-radius: 8px;
-}
-            
-.form-group {
-    margin-bottom: 15px;
-}
-            
-label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: 600;
-}
-            
-input, textarea {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 16px;
-}
-            
-textarea {
-    min-height: 120px;
-    resize: vertical;
-}
-            
-button {
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    order: 2;
-}
-            
-.error {
-    color: #e74c3c;
-    font-size: 14px;
-    margin-top: 5px;
-    display: none;
-}
-            
-.contact-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.contact-item .icon {
-    margin-right: 10px;
-    font-size: 20px;
-    width: 24px;
-    text-align: center;
-}
-            
-.social-icons {
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;
-}
-            
-.social-icons a {
-    display: inline-block;
-    /* color: ; */
-    font-size: 24px;
-    transition: transform 0.3s;
-}
-            
-.social-icons a:hover {
-    transform: translateY(-3px);
-}
-
-.subtitle-op1 {
-    font-size: 1.6rem;
-    color: rgb(0, 0, 90);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .title-op1 {
-    color: rgb(0, 0, 90);
-    font-size: 2.3rem;
     text-align: center;
-    height: 100px;
+    font-size: 2.6rem;
+    font-weight: bold;
+    color: rgb(0, 0, 90);
+    margin-bottom: 2rem;
 }
 
-/* Estilos para campos com erro */
-.error-field {
-    border: 2px solid #e74c3c !important;
-    background-color: #fdf2f2;
-}
-
-.error {
-    display: none;
-    color: #e74c3c;
-    font-size: 0.85rem;
-    margin-top: 5px;
-}
-
-/* Mensagem de sucesso */
-.success-message {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-
-.success-content {
+/* FORMULÁRIO */
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 25px;
     background: white;
-    padding: 2rem;
-    border-radius: 8px;
-    text-align: center;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    max-width: 400px;
-    width: 90%;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-.success-content h3 {
-    color: rgb(0, 0, 90);
-    margin-bottom: 1rem;
-}
-
-.success-content button {
-    background: #1E40AF;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 1rem;
-    font-size: 1rem;
-}
-
-.success-content button:hover {
-    background: #1A3A8C;
-}
-
-/* Melhorar a aparência dos campos */
 .form-group {
     margin-bottom: 1.5rem;
 }
 
 .form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
+    color: rgb(0, 0, 90);
     font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+    display: block;
 }
 
-.form-group input,
-.form-group textarea {
+input, textarea, select {
     width: 100%;
     padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
     font-size: 1rem;
-    transition: border-color 0.3s;
+    background: #fff;
 }
 
-.form-group input:focus,
-.form-group textarea:focus {
-    border-color: #3498db;
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+textarea {
+    resize: vertical;
 }
 
+/* Estilo dos erros */
+.error {
+    color: #e74c3c;
+    font-size: 0.9rem;
+    margin-top: 5px;
+    display: none;
+}
+
+.error-field {
+    border-color: #e74c3c !important;
+}
+
+/* Botão */
 button[type="submit"] {
-    background: #3498db;
-    color: white;
+    width: 100%;
+    padding: 15px;
+    background-color: #1E40AF;
     border: none;
-    padding: 12px 24px;
-    border-radius: 4px;
+    border-radius: 6px;
+    color: white;
+    font-size: 1.2rem;
     cursor: pointer;
-    font-size: 1.1rem;
-    font-weight: 600;
-    transition: background 0.3s;
+    margin-top: 1rem;
+    transition: 0.3s;
 }
 
 button[type="submit"]:hover {
-    background: #2980b9;
+    background-color: #162f85;
+    transform: translateY(-2px);
 }
 
-/* Responsividade da tela */
-
-/* Tablet */
-@media (max-width: 1024px) {
-    .navbar {
-        padding: 1rem 1.5rem;
-    }
-
-    .nome {
-        font-size: 3.5rem;
-    }
+/* FOOTER */
+.footer {
+    margin-top: auto;
+    background-color: white;
+    padding: 1.5rem 0;
+    text-align: center;
 }
 
-/* Mobile */
+.footer-content {
+    max-width: 1200px;
+    margin: auto;
+    padding: 0 1.5rem;
+}
+
+.footer-top {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.footer-bottom {
+    font-size: 0.9rem;
+    opacity: 0.75;
+    margin-top: 5px;
+}
+
+/* MOBILE */
 @media (max-width: 768px) {
+    
     .menu-toggle {
         display: block;
-        position: absolute;
-        right: 1rem;
-        top: 1.5rem;
-        order: 3;
     }
-    
-    .desktop-nav {
-        display: none;
-    }
-    
-    .navbar {
-        padding: 1rem;
-        min-height: 70px;
-        flex-direction: row;
-        align-items: center;
-        height: auto;
-        position: relative;
-        flex-wrap: wrap;
-    }
-    
-    .nome {
-        font-size: 1.8rem;
-        height: auto;
-        order: 2;
-        /* margin-left: 1rem; */
-        margin-top: 0;
-    }
-    
-    .logo {
-        height: 40px;
-        order: 1;
-    }
-    
-    /* Container dos links ocupa toda a largura */
-    .navbar > div[style*="width: 100%"] {
-        order: 4;
-        width: 100% !important;
-        margin-top: 1rem;
-    }
-    
+
     .nav-links {
+        display: none;
         flex-direction: column;
         width: 100%;
-        gap: 0;
-        float: none;
-        display: none; /* Inicialmente escondido */
+        margin-top: 1rem;
     }
-    
+
     .nav-links.active {
-        display: flex; /* Mostra quando ativo */
+        display: flex;
     }
-    
+
     .nav-links li {
-        width: 100%;
-        border-bottom: 1px solid #f0f0f0;
+        padding: 1rem 0;
+        border-bottom: 1px solid #eee;
         text-align: center;
     }
-    
-    .nav-links li:last-child {
-        border-bottom: none;
-    }
-    
-    .nav-links a {
-        display: block;
-        padding: 1rem 0;
-        width: 100%;
-        font-size: 1.1rem;
-    }
-    
-    .header {
-        height: auto;
-    }
-    
-    .container {
-        margin: 0.5rem;
-        padding: 1.5rem;
-    }
-    
-    .contact-wrapper {
-        gap: 1.5rem;
-    }
-    
-    .info-container {
-        padding: 1rem;
-    }
-    
-    .social-icons {
-        margin-top: 1.5rem;
-    }
-    
-    .main-content {
-        padding: 0.5rem;
-    }
-}
 
-/* Mobile pequeno */
-@media (max-width: 480px) {
-    .brand-container {
-        gap: 0.5rem;
-    }
-    
     .nome {
-        font-size: 1.8rem;
+        font-size: 2rem;
     }
-    
-    .logo {
-        height: 35px;
+
+    .logo img {
+        height: 45px;
     }
-    
+
     .container {
-        margin: 0.25rem;
-        padding: 1rem;
-    }
-    
-    .contact-item {
-        margin-bottom: 1rem;
-        gap: 0.5rem;
-    }
-    
-    .success-content {
-        width: 95%;
-        margin: 0.5rem;
-        padding: 1.5rem;
-    }
-    
-    .menu-toggle {
-        top: 1.2rem;
-        right: 0.8rem;
-        font-size: 1.5rem;
-    }
-    
-    .nome {
-        margin-left: 0.5rem;
-        font-size: 1.6rem;
+        padding: 20px;
     }
 }
