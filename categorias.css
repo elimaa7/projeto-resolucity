@@ -1,6 +1,4 @@
-/* ============================
-      VARIÁVEIS DO TEMA
-============================= */
+/*VARIÁVEIS DO TEMA*/
 :root {
   --amarelo: #ffcc00;
   --preto: #0c0c0c;
@@ -9,9 +7,7 @@
   --azul-escuro: #1e40af;
 }
 
-/* ============================
-     RESET / GLOBAL
-============================= */
+/*RESET / BASE GLOBAL*/
 * {
   margin: 0;
   padding: 0;
@@ -21,119 +17,135 @@
 body {
   font-family: "Poppins", sans-serif;
   background: var(--cinza);
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
 }
 
-/* ============================
-            HEADER
-============================= */
+/*HEADER SUPERIOR*/
 .top-header {
   background: #fff;
   font-size: 0.9rem;
 }
 
+.top-header i {
+  font-size: 1rem;
+}
+
+/*NAVBAR*/
 .navbar {
   background-color: var(--preto) !important;
+  transition: background 0.3s ease;
+}
+
+.navbar.scrolled {
+  background-color: #000 !important;
 }
 
 .navbar-nav .nav-link {
   color: #fff !important;
   font-weight: 500;
+  margin-right: 15px;
+  transition: 0.3s;
 }
 
 .navbar-nav .nav-link:hover {
   color: var(--amarelo) !important;
 }
 
-/* ============================
-       TÍTULO DA PÁGINA
-============================= */
+.btn-warning {
+  background-color: var(--amarelo) !important;
+  border: none;
+  transition: 0.3s;
+}
+
+.btn-warning:hover {
+  background-color: #e6b800 !important;
+  transform: scale(1.05);
+}
+
+/*TÍTULO*/
 .title-op1 {
   text-align: center;
   margin: 3rem 0 2rem;
-  font-size: 2.5rem;
+  font-size: 2.6rem;
   font-weight: 700;
   color: var(--preto);
 }
 
-/* ============================
-   CONTAINER DO FORMULÁRIO
-============================= */
-.form-wrapper {
-  max-width: 900px;
-  margin: 0 auto 4rem;
+/*GRID DE CATEGORIAS*/
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  padding: 0 2rem 3rem;
+}
+
+/* CARD */
+.cat-card {
   background: #fff;
-  padding: 2.5rem;
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  border-radius: 14px;
+  padding: 1.7rem;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  text-align: center;
 }
 
-/* CAMPOS */
-.form-group {
-  margin-bottom: 1.5rem;
+.cat-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
 }
 
-.form-group label {
+.cat-card h2 {
+  font-size: 1.4rem;
   font-weight: 700;
-  font-size: 1.1rem;
   color: var(--preto);
-  margin-bottom: 8px;
-  display: block;
+  margin-bottom: 0.7rem;
 }
 
-.form-group input,
-.form-group select,
-.form-group textarea {
-  width: 100%;
-  padding: 14px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  font-size: 1rem;
-  background: var(--cinza-claro);
-  transition: border-color 0.3s, box-shadow 0.3s;
+.cat-card p {
+  font-size: 0.95rem;
+  color: #555;
 }
 
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-  border-color: var(--azul-escuro);
-  box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.25);
-  outline: none;
+/* BOTÃO */
+.center-btn {
+  text-align: center;
+  margin: 2rem 0 4rem;
 }
 
-/* ============================
-          BOTÃO ENVIAR
-============================= */
-.btn-enviar {
-  width: 100%;
-  padding: 15px;
-  background: var(--azul-escuro);
-  color: #fff;
-  font-size: 1.2rem;
-  border-radius: 8px;
+.btn-relato {
+  padding: 15px 35px;
+  background-color: var(--azul-escuro);
   border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 1.2rem;
   cursor: pointer;
-  font-weight: 600;
-  margin-top: 1rem;
-  transition: 0.3s ease;
+  transition: 0.3s;
 }
 
-.btn-enviar:hover {
+.btn-relato:hover {
   background-color: #162f85;
   transform: translateY(-2px);
 }
 
-/* ============================
-              FOOTER
-============================= */
+/*FOOTER*/
 .footer {
-  background: var(--preto);
+  background-color: var(--preto);
   padding: 3rem 0;
   margin-top: auto;
   color: #ccc;
-  text-align: center;
+}
+
+.footer a {
+  color: #ddd;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.footer a:hover {
+  color: var(--amarelo);
 }
 
 .footer-top {
@@ -146,34 +158,31 @@ body {
   opacity: 0.8;
 }
 
-/* ============================
-        HERO DE FUNDO
-============================= */
-.hero-relatar {
-  background: linear-gradient(rgba(0,0,0,0.50), rgba(0,0,0,0.35)),
-              url("imagens/pixnio-4840x3227.jpg") center/cover no-repeat;
-  height: 260px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.hero-relatar h1 {
-  color: white;
-  font-size: 2.8rem;
-  font-weight: 700;
-  text-shadow: 0 4px 15px rgba(0,0,0,0.4);
-}
-
-/* ============================
-        RESPONSIVIDADE
-============================= */
+/*RESPONSIVE*/
 @media (max-width: 768px) {
   .title-op1 {
     font-size: 2rem;
   }
+}
 
-  .form-wrapper {
-    padding: 1.7rem;
-  }
+.cat-card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: .3s;
+    text-decoration: none;
+    color: inherit;
+}
+
+.cat-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.cat-card .icon {
+    font-size: 2.8rem;
+    color: #f1c40f;
+    margin-bottom: 10px;
 }
