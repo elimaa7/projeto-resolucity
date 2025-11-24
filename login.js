@@ -1,310 +1,245 @@
-//Simulação do banco de dados
-
 class UserDatabase {
     constructor() {
-        this.storageKey = 'resolucity_users';
-        this.currentUserKey = 'resolucity_current_user';
+        this.dbKey = 'resolucity_users_v1';
+        this.sessionKey = 'resolucity_session_v1';
+        this.init();
     }
 
-    // Inicializa o banco de dados se não existir
     init() {
-        if (!localStorage.getItem(this.storageKey)) {
-            localStorage.setItem(this.storageKey, JSON.stringify([]));
+        if (!localStorage.getItem(this.dbKey)) {
+            localStorage.setItem(this.dbKey, JSON.stringify([]));
         }
     }
 
-    // Retorna todos os usuários
-    getAllUsers() {
-        return JSON.parse(localStorage.getItem(this.storageKey) || '[]');
-    }
-
-    // Salva um novo usuário
     saveUser(user) {
         const users = this.getAllUsers();
-        users.push({
-            id: Date.now(),
-            ...user,
-            createdAt: new Date().toISOString()
-        });
-        localStorage.setItem(this.storageKey, JSON.stringify(users));
-        return true;
+        const newUser = { ...user, id: Date.now(), createdAt: new Date().toISOString() };
+        users.push(newUser);
+        localStorage.setItem(this.dbKey, JSON.stringify(users));
+        return newUser;
     }
 
-    // Verifica se o email já existe
-    emailExists(email) {
+    getAllUsers() {
+        return JSON.parse(localStorage.getItem(this.dbKey) || '[]');
+    }
+
+    // READ: Busca usuário por email
+    findUserByEmail(email) {
         const users = this.getAllUsers();
-        return users.some(user => user.email.toLowerCase() === email.toLowerCase());
+        return users.find(u => u.email.toLowerCase() === email.toLowerCase());
     }
 
-    // Busca usuário por email e senha
-    findUser(email, password) {
+    // AUTH: Valida credenciais
+    authenticate(email, password) {
         const users = this.getAllUsers();
-        return users.find(user => 
-            user.email.toLowerCase() === email.toLowerCase() && 
-            user.password === password
-        );
+        return users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
     }
 
-    // Salva o usuário logado
-    setCurrentUser(user) {
-        const userToStore = { ...user };
-        delete userToStore.password; // Não armazena senha no usuário atual
-        localStorage.setItem(this.currentUserKey, JSON.stringify(userToStore));
+    // SESSION: Salva usuário logado
+    login(user) {
+        // Remove a senha antes de salvar na sessão por segurança
+        const { password, ...safeUser } = user;
+        localStorage.setItem(this.sessionKey, JSON.stringify(safeUser));
     }
 
-    // Retorna o usuário logado
+    // SESSION: Retorna usuário logado
     getCurrentUser() {
-        return JSON.parse(localStorage.getItem(this.currentUserKey) || 'null');
+        return JSON.parse(localStorage.getItem(this.sessionKey));
     }
 
-    // Remove o usuário logado (logout)
-    clearCurrentUser() {
-        localStorage.removeItem(this.currentUserKey);
+    // SESSION: Logout
+    logout() {
+        localStorage.removeItem(this.sessionKey);
     }
 }
 
-// Instancia o banco de dados
+// Instância do Banco de Dados
 const db = new UserDatabase();
-db.init();
 
-//Consumo da api, validação de email
-
-async function validateEmailAPI(email) {
+// Função para consumir uma API externa durante o cadastro
+// Usaremos a Agify.io para estimar a idade baseada no nome
+async function fetchUserDataFromAPI(name) {
     try {
-        // Usando a API do Hunter.io para validar formato
-        // Esta é uma validação adicional via API pública
-        const response = await fetch(`https://api.eva.pingutil.com/email?email=${encodeURIComponent(email)}`);
+        const firstName = name.split(' ')[0];
+        const response = await fetch(`https://api.agify.io?name=${firstName}&country_id=BR`);
+        if (!response.ok) throw new Error('Falha na API');
         const data = await response.json();
-        
         return {
-            valid: data.status === 'success' && data.data.deliverable,
-            message: data.status === 'success' ? 'Email válido' : 'Email pode ser inválido'
+            estimatedAge: data.age || 'Não estimado',
+            apiSyncDate: new Date().toISOString()
         };
     } catch (error) {
-        // Se a API falhar, aceita a validação local
-        console.log('API de validação indisponível, usando validação local');
-        return { valid: true, message: 'Validação local' };
+        console.warn('Erro ao consumir API externa:', error);
+        return { error: 'API indisponível no momento' };
     }
 }
 
-//Validações gerais
-
+/* --- VALIDAÇÕES DE FORMULÁRIO --- */
 function validateEmail(email) {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(email);
-}
-
-function validatePassword(password) {
-    return password.length >= 6;
-}
-
-function validateName(name) {
-    return name.trim().length >= 3;
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
 function showError(fieldId, message) {
-    const field = document.getElementById(fieldId);
-    const errorElement = document.getElementById(`${fieldId}-error`);
+    const errorEl = document.getElementById(`${fieldId}-error`);
+    const inputEl = document.getElementById(fieldId);
     
-    field.classList.add('error-field');
-    errorElement.textContent = message;
-    errorElement.classList.add('show');
+    if (errorEl) {
+        errorEl.textContent = message;
+        errorEl.style.display = 'block';
+    }
+    if (inputEl) {
+        inputEl.classList.add('error-field');
+    }
 }
 
-function clearError(fieldId) {
-    const field = document.getElementById(fieldId);
-    const errorElement = document.getElementById(`${fieldId}-error`);
-    
-    field.classList.remove('error-field');
-    errorElement.textContent = '';
-    errorElement.classList.remove('show');
+function clearErrors() {
+    document.querySelectorAll('.error').forEach(el => el.style.display = 'none');
+    document.querySelectorAll('.error-field').forEach(el => el.classList.remove('error-field'));
 }
 
-function clearAllErrors(formId) {
-    const form = document.getElementById(formId);
-    const errorFields = form.querySelectorAll('.error-field');
-    const errorMessages = form.querySelectorAll('.error.show');
-    
-    errorFields.forEach(field => field.classList.remove('error-field'));
-    errorMessages.forEach(error => {
-        error.textContent = '';
-        error.classList.remove('show');
-    });
-}
-
-//Modal de sucesso
-
-function showSuccessModal(title, message, callback) {
+/* --- MODAL DE SUCESSO --- */
+function showModal(title, message, redirectUrl = null) {
     const modal = document.getElementById('success-modal');
-    const titleElement = document.getElementById('success-title');
-    const messageElement = document.getElementById('success-message');
+    if (!modal) return alert(message);
+
+    document.getElementById('success-title').textContent = title;
+    document.getElementById('success-message').textContent = message;
     
-    titleElement.textContent = title;
-    messageElement.textContent = message;
     modal.style.display = 'flex';
-    
-    const closeButton = document.getElementById('close-modal');
-    closeButton.onclick = () => {
+
+    document.getElementById('close-modal').onclick = () => {
         modal.style.display = 'none';
-        if (callback) callback();
+        if (redirectUrl) window.location.href = redirectUrl;
     };
 }
 
-//Alternar entre login e cadastro
+/* --- EVENTOS DA DOM --- */
+document.addEventListener('DOMContentLoaded', () => {
 
-document.addEventListener('DOMContentLoaded', function() {
-    const loginForm = document.getElementById('login-form');
-    const registerForm = document.getElementById('register-form');
-    const showRegisterBtn = document.getElementById('show-register');
-    const showLoginBtn = document.getElementById('show-login');
-
-    showRegisterBtn.addEventListener('click', (e) => {
+    // 1. Controle de alternância entre Login e Cadastro
+    const loginFormBox = document.getElementById('login-form');
+    const registerFormBox = document.getElementById('register-form');
+    
+    // Links para alternar
+    document.getElementById('show-register')?.addEventListener('click', (e) => {
         e.preventDefault();
-        loginForm.classList.add('d-none');
-        registerForm.classList.remove('d-none');
-        clearAllErrors('loginForm');
+        loginFormBox.classList.add('d-none');
+        registerFormBox.classList.remove('d-none');
+        clearErrors();
     });
 
-    showLoginBtn.addEventListener('click', (e) => {
+    document.getElementById('show-login')?.addEventListener('click', (e) => {
         e.preventDefault();
-        registerForm.classList.add('d-none');
-        loginForm.classList.remove('d-none');
-        clearAllErrors('registerForm');
+        registerFormBox.classList.add('d-none');
+        loginFormBox.classList.remove('d-none');
+        clearErrors();
     });
 
-    // Verifica se já há usuário logado
+    // 2. Verifica se já está logado
     const currentUser = db.getCurrentUser();
     if (currentUser) {
-        showSuccessModal(
-            'Bem-vindo de volta!',
-            `Você já está logado como ${currentUser.name}.`,
-        );
-    }
-});
-
-//Formulário de login
-
-document.getElementById('loginForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    clearAllErrors('loginForm');
-
-    const email = document.getElementById('login-email').value.trim();
-    const password = document.getElementById('login-password').value;
-    
-    let hasError = false;
-
-    // Validações
-    if (!email) {
-        showError('login-email', 'Por favor, insira seu e-mail');
-        hasError = true;
-    } else if (!validateEmail(email)) {
-        showError('login-email', 'E-mail inválido');
-        hasError = true;
+        // Se estiver na página de login, avisa e redireciona ou mostra estado
+        showModal('Sessão Ativa', `Olá, ${currentUser.name}! Você já está conectado.`, 'index.html');
     }
 
-    if (!password) {
-        showError('login-password', 'Por favor, insira sua senha');
-        hasError = true;
+    // 3. LOGIN - SUBMIT
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            clearErrors();
+
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+
+            // Validação simples
+            if (!email || !password) {
+                if (!email) showError('login-email', 'Informe seu e-mail');
+                if (!password) showError('login-password', 'Informe sua senha');
+                return;
+            }
+
+            // Busca no "Banco de Dados"
+            const user = db.authenticate(email, password);
+
+            if (user) {
+                db.login(user);
+                showModal('Sucesso!', 'Login realizado com sucesso.', 'index.html');
+            } else {
+                showError('login-password', 'E-mail ou senha incorretos.');
+            }
+        });
     }
 
-    if (hasError) return;
+    // 4. CADASTRO - SUBMIT
+    const registerForm = document.getElementById('registerForm');
+    if (registerForm) {
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            clearErrors();
+            
+            // UI Feedback de carregamento
+            const btnSubmit = registerForm.querySelector('button[type="submit"]');
+            const originalBtnText = btnSubmit.textContent;
+            btnSubmit.textContent = 'Processando...';
+            btnSubmit.disabled = true;
 
-    // Busca o usuário no banco
-    const user = db.findUser(email, password);
+            const name = document.getElementById('register-name').value.trim();
+            const email = document.getElementById('register-email').value.trim();
+            const password = document.getElementById('register-password').value;
 
-    if (!user) {
-        showError('login-email', 'E-mail ou senha incorretos');
-        showError('login-password', 'E-mail ou senha incorretos');
-        return;
-    }
+            let hasError = false;
 
-    // Login bem-sucedido
-    db.setCurrentUser(user);
-    
-    showSuccessModal(
-        'Login realizado!',
-        `Bem-vindo de volta, ${user.name}!`,
-        () => {
-            window.location.href = 'index.html';
-        }
-    );
-});
+            // Validações locais
+            if (name.length < 3) {
+                showError('register-name', 'Nome deve ter no mínimo 3 caracteres');
+                hasError = true;
+            }
+            if (!validateEmail(email)) {
+                showError('register-email', 'E-mail inválido');
+                hasError = true;
+            }
+            if (password.length < 6) {
+                showError('register-password', 'Senha deve ter no mínimo 6 caracteres');
+                hasError = true;
+            }
 
-//Formulário de cadastro
+            // Verifica duplicidade no LocalStorage
+            if (db.findUserByEmail(email)) {
+                showError('register-email', 'Este e-mail já está cadastrado');
+                hasError = true;
+            }
 
-document.getElementById('registerForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    clearAllErrors('registerForm');
+            if (hasError) {
+                btnSubmit.textContent = originalBtnText;
+                btnSubmit.disabled = false;
+                return;
+            }
 
-    const name = document.getElementById('register-name').value.trim();
-    const email = document.getElementById('register-email').value.trim();
-    const password = document.getElementById('register-password').value;
-    
-    let hasError = false;
+            // Buscamos dados extras da API para compor o objeto do usuário
+            const apiData = await fetchUserDataFromAPI(name);
+            
+            // Cria objeto do usuário unindo dados do form + dados da API
+            const newUser = {
+                name,
+                email,
+                password, // Em produção, criptografaríamos isso
+                metadata: apiData // Dados vindos da API externa
+            };
 
-    // Validações
-    if (!name) {
-        showError('register-name', 'Por favor, insira seu nome completo');
-        hasError = true;
-    } else if (!validateName(name)) {
-        showError('register-name', 'Nome deve ter pelo menos 3 caracteres');
-        hasError = true;
-    }
+            // Salva no LocalStorage
+            db.saveUser(newUser);
 
-    if (!email) {
-        showError('register-email', 'Por favor, insira seu e-mail');
-        hasError = true;
-    } else if (!validateEmail(email)) {
-        showError('register-email', 'E-mail inválido');
-        hasError = true;
-    } else if (db.emailExists(email)) {
-        showError('register-email', 'Este e-mail já está cadastrado');
-        hasError = true;
-    }
+            // Restaura botão
+            btnSubmit.textContent = originalBtnText;
+            btnSubmit.disabled = false;
 
-    if (!password) {
-        showError('register-password', 'Por favor, insira uma senha');
-        hasError = true;
-    } else if (!validatePassword(password)) {
-        showError('register-password', 'Senha deve ter pelo menos 6 caracteres');
-        hasError = true;
-    }
-
-    if (hasError) return;
-
-    // Salva o novo usuário
-    const newUser = {
-        name,
-        email,
-        password
-    };
-
-    db.saveUser(newUser);
-    
-    showSuccessModal(
-        'Cadastro realizado!',
-        'Sua conta foi criada com sucesso. Faça login para continuar.',
-        () => {
-            // Limpa o formulário
-            document.getElementById('registerForm').reset();
-            // Volta para o login
-            document.getElementById('register-form').classList.add('hidden');
-            document.getElementById('login-form').classList.remove('hidden');
-        }
-    );
-});
-
-// Menu mobile toggle
-
-document.addEventListener('DOMContentLoaded', function() {
-    const menuToggle = document.querySelector('.menu-toggle');
-    const navLinks = document.querySelector('.nav-links');
-    
-    if (menuToggle && navLinks) {
-        menuToggle.addEventListener('click', function() {
-            navLinks.classList.toggle('active');
-            const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
-            menuToggle.setAttribute('aria-expanded', !isExpanded);
+            showModal('Cadastro Realizado', 'Sua conta foi criada! Faça login para continuar.', null);
+            
+            // Troca para tela de login automaticamente
+            registerForm.reset();
+            registerFormBox.classList.add('d-none');
+            loginFormBox.classList.remove('d-none');
         });
     }
 });
