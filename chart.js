@@ -1,4 +1,4 @@
-/* chart.js corrigido - resolves growth issue and adds safe resize handling */
+/* chart.js corrigido - restaura lógica original de injeção do gráfico de linha */
 
 /* Theme colors */
 const COLOR_YELLOW = "#ffcc00";
@@ -15,13 +15,11 @@ const complaintData = [12,5,7,8,15,10,9,6,4,5,8,6,14,7,5,2];
 const resolvedData  = [45,18,25,30,55,35,32,22,15,18,28,22,50,25,20,5];
 const monthlyData = [55,60,72,65,80,75,95,120,110,105,130,140];
 
-/* dynamic colors */
 const backgroundColors = categories.map((_, i) => `hsl(${Math.round(i*360/categories.length)},78%,62%)`);
 
 function isMobile() { return window.innerWidth <= 768; }
-function formatLabel(label) { return isMobile() && label.length > 18 ? label.substring(0,18) + "..." : label; }
+function formatLabel(label) { return isMobile() && label.length > 15 ? label.substring(0,15) + "..." : label; }
 
-/* Shadow plugin (lightweight) */
 const shadowPlugin = {
   id: 'shadow',
   beforeDatasetsDraw(chart) {
@@ -37,15 +35,13 @@ const shadowPlugin = {
 };
 Chart.register(shadowPlugin);
 
-/* Chart instances */
 let pieChart = null;
 let barChart = null;
 let lineChart = null;
 
-/* common options helper */
 function baseOptions() {
   return {
-    maintainAspectRatio: true, // important: prevent canvas from expanding the parent
+    maintainAspectRatio: false,
     responsive: true,
     plugins: {
       tooltip: {
@@ -59,17 +55,14 @@ function baseOptions() {
   };
 }
 
-/* Create Pie */
 function createPie() {
   const ctx = document.getElementById('pieChart').getContext('2d');
 
   const opts = Object.assign({}, baseOptions(), {
-    aspectRatio: isMobile() ? 1 : 1.4,
-    animation: { animateRotate: true, animateScale: true, duration: 900 },
     plugins: {
       legend: {
         position: isMobile() ? 'bottom' : 'right',
-        labels: { boxWidth: 12, font: { size: isMobile() ? 9 : 11 }, padding: 10 }
+        labels: { boxWidth: 12, font: { size: isMobile() ? 10 : 11 }, padding: 10 }
       },
       tooltip: {
         callbacks: {
@@ -91,13 +84,10 @@ function createPie() {
   });
 }
 
-/* Create Bar */
 function createBar() {
   const ctx = document.getElementById('barChart').getContext('2d');
 
   const opts = Object.assign({}, baseOptions(), {
-    aspectRatio: isMobile() ? 1.2 : 1.6,
-    animation: { duration: 900, easing: 'easeOutQuart' },
     scales: {
       x: { ticks: { color: '#222', font: { size: isMobile()?9:11 } }, grid: { display: false } },
       y: { beginAtZero: true, ticks: { color: '#222', font: { size: isMobile()?9:11 } }, grid: { color: 'rgba(0,0,0,0.07)' } }
@@ -120,15 +110,15 @@ function createBar() {
   });
 }
 
-/* Create Line */
 function createLine() {
-  // create a container if not exists (safe)
   let lineEl = document.getElementById('lineChart');
+  
   if (!lineEl) {
     const containerRow = document.querySelector('.container-chart .row') || document.querySelector('.container .row');
     if (containerRow) {
       const wrapper = document.createElement('div');
       wrapper.className = 'col-12 mt-4';
+      wrapper.id = 'lineWrapper';
       wrapper.innerHTML = `
         <div class="chart-box bg-white p-4 rounded shadow-sm">
           <h5 class="mb-3 chart-title">Evolução Mensal de Relatos</h5>
@@ -137,7 +127,6 @@ function createLine() {
       containerRow.appendChild(wrapper);
       lineEl = document.getElementById('lineChart');
     } else {
-      console.warn('Não encontrou o container para inserir o gráfico de linha.');
       return null;
     }
   }
@@ -145,8 +134,6 @@ function createLine() {
   const ctx = lineEl.getContext('2d');
 
   const opts = Object.assign({}, baseOptions(), {
-    aspectRatio: isMobile() ? 1.8 : 3,
-    animation: { duration: 1100, easing: 'easeOutCubic' },
     scales: {
       x: { ticks: { color: '#222' }, grid: { color: 'rgba(0,0,0,0.06)' } },
       y: { ticks: { color: '#222' }, grid: { color: 'rgba(0,0,0,0.06)' }, beginAtZero: true }
@@ -174,26 +161,20 @@ function createLine() {
   });
 }
 
-/* Initialize all charts safely */
 function initAllCharts() {
-  // destroy existing
-  if (pieChart) { try { pieChart.destroy(); } catch(e){} }
-  if (barChart) { try { barChart.destroy(); } catch(e){} }
-  if (lineChart) { try { lineChart.destroy(); } catch(e){} }
+  if (pieChart) pieChart.destroy();
+  if (barChart) barChart.destroy();
+  if (lineChart) lineChart.destroy();
 
   pieChart = createPie();
   barChart = createBar();
   lineChart = createLine();
 }
 
-/* initialize */
 initAllCharts();
 
-/* debounced resize (rebuild charts instead of reload) */
 let resizeTimer = null;
 window.addEventListener('resize', () => {
   clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(() => {
-    initAllCharts();
-  }, 300);
+  resizeTimer = setTimeout(initAllCharts, 300);
 });
