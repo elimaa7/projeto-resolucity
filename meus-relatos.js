@@ -1,8 +1,12 @@
 /* MEUS-RELATOS.JS
-   Lógica para listar os relatos do usuário logado
+   Lógica para listar e EXCLUIR os relatos do usuário logado
 */
 
 document.addEventListener('DOMContentLoaded', () => {
+    renderReports();
+});
+
+function renderReports() {
     const container = document.getElementById('reports-container');
     
     // 1. Verificar Login
@@ -40,13 +44,13 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `;
     } else {
-        // Ordenar por data (mais recente primeiro) - Opcional, assume ID como timestamp
+        // Ordenar por data (mais recente primeiro)
         myReports.sort((a, b) => b.id - a.id);
 
         let html = '';
         myReports.forEach(report => {
             html += `
-                <div class="card report-card shadow-sm bg-white">
+                <div class="card report-card shadow-sm bg-white mb-3">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start flex-wrap">
                             <div>
@@ -68,10 +72,36 @@ document.addEventListener('DOMContentLoaded', () => {
                         <p class="card-text">
                             ${report.description}
                         </p>
+                        
+                        <div class="d-flex justify-content-end mt-3">
+                            <button onclick="deleteReport(${report.id})" class="btn btn-sm btn-outline-danger fw-bold">
+                                <i class="bi bi-trash-fill me-1"></i> Excluir
+                            </button>
+                        </div>
                     </div>
                 </div>
             `;
         });
         container.innerHTML = html;
     }
-});
+}
+
+// FUNÇÃO DE EXCLUIR (Global para o onclick funcionar)
+window.deleteReport = function(id) {
+    if (confirm("Tem certeza que deseja excluir este relato? Essa ação não pode ser desfeita.")) {
+        // 1. Pega todos os relatos
+        const allReports = JSON.parse(localStorage.getItem('resolucity_reports_v1') || '[]');
+        
+        // 2. Filtra removendo o ID selecionado
+        const updatedReports = allReports.filter(report => report.id !== id);
+        
+        // 3. Salva a nova lista
+        localStorage.setItem('resolucity_reports_v1', JSON.stringify(updatedReports));
+        
+        // 4. Recarrega a lista na tela
+        renderReports();
+        
+        // Opcional: Feedback visual rápido (Toast ou Alert)
+        // alert("Relato excluído com sucesso."); 
+    }
+};
