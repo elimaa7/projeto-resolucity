@@ -13,40 +13,45 @@
 <body>
 
 <header>
-  <div class="top-header py-2 border-bottom bg-white">
-    <div class="container d-flex justify-content-between align-items-center flex-wrap text-dark">
+  <div class="top-header">
+    <div class="container">
+      
       <div class="d-flex align-items-center">
         <img src="imagens/logo.png" alt="logo" width="40" class="me-2">
-        <span class="fw-bold fs-5 text-uppercase">Resolucity</span>
+        <span class="fw-bold fs-5 text-uppercase text-dark">Resolucity</span>
       </div>
-      <div class="contact-info d-flex flex-wrap align-items-center text-secondary small mt-2 mt-md-0">
-        <div class="me-4 d-flex align-items-center">
-          <i class="bi bi-envelope-fill text-warning me-1"></i>
+
+      <div class="contact-info">
+        <a href="#" class="contact-item">
+          <i class="bi bi-envelope-fill"></i>
           <span>contato@resolucity.com</span>
-        </div>
-        <div class="me-4 d-flex align-items-center">
-          <i class="bi bi-telephone-fill text-warning me-1"></i>
+        </a>
+        <a href="#" class="contact-item">
+          <i class="bi bi-telephone-fill"></i>
           <span>+55 (24) 99999-9999</span>
-        </div>
-        <div class="d-flex align-items-center">
-          <i class="bi bi-clock-fill text-warning me-1"></i>
-          <span>Seg - Sex: 08h00 - 17h00</span>
+        </a>
+        <div class="contact-item">
+          <i class="bi bi-clock-fill"></i>
+          <span>Seg - Sex: 08h - 17h</span>
         </div>
       </div>
+
     </div>
   </div>
 
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
     <div class="container">
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
         <span class="navbar-toggler-icon"></span>
       </button>
+
       <div class="collapse navbar-collapse justify-content-between" id="menu">
-        <ul class="navbar-nav">
-          <li class="nav-item"><a class="nav-link" href="index.html">Início</a></li>
-          <li class="nav-item"><a class="nav-link active" href="estatisticas.html">Estatísticas</a></li>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link active" href="index.html">Início</a></li>
+          <li class="nav-item"><a class="nav-link" href="estatisticas.html">Estatísticas</a></li>
           <li class="nav-item"><a class="nav-link" href="sobre.html">Sobre</a></li>
           <li class="nav-item"><a class="nav-link" href="contato.html">Contato</a></li>
+          <li class="nav-item"><a class="nav-link" href="meus-relatos.html">Meus Relatos</a></li>
         </ul>
         <a href="login.html" class="btn btn-warning fw-semibold text-dark px-3">Fazer Login</a>
       </div>
@@ -95,7 +100,7 @@
           <img src="imagens/transparencia-publica-municipal.jpg" class="card-img-top" alt="Transparência">
           <div class="card-body">
             <h5 class="fw-bold">Transparência Pública</h5>
-            <p>Acompanhe relatórios e dados sobre as ações tomadas.</p>
+            <p>Acompanhe relatórios e dados sobre as ações tomadas com base nos relatos enviados.</p>
             <a href="estatisticas.html" class="fw-semibold text-dark">Ver dados →</a>
           </div>
         </div>
@@ -119,7 +124,7 @@
     <div class="row align-items-center gy-4">
       <div class="col-md-6" data-aos="fade-right">
         <h2 class="fw-bold mb-4">Sobre o <span class="text-yellow">Resolucity</span></h2>
-        <p>O <span class="text-yellow">Resolucity</span> é uma plataforma digital que transforma relatos anônimos em dados estratégicos.</p>
+        <p>O <span class="text-yellow">Resolucity</span> é uma plataforma digital que transforma relatos anônimos em dados estratégicos, fortalecendo a transparência e a eficiência urbana.</p>
         <a href="sobre.html" class="btn btn-dark mt-3">Saiba mais</a>
       </div>
       <div class="col-md-6" data-aos="fade-left">
@@ -157,22 +162,23 @@
     <div class="row gy-4">
       <div class="col-md-4">
         <h5 class="text-warning fw-bold mb-3">Sobre o Resolucity</h5>
-        <p>Conectando cidadãos e administração pública.</p>
+        <p>Conectando cidadãos e administração pública por meio de relatos anônimos e dados transparentes.</p>
       </div>
       <div class="col-md-4">
-        <h5 class="text-warning fw-bold mb-3">Links</h5>
+        <h5 class="text-warning fw-bold mb-3">Links Rápidos</h5>
         <ul class="list-unstyled">
           <li><a href="index.html">Início</a></li>
           <li><a href="estatisticas.html">Estatísticas</a></li>
           <li><a href="sobre.html">Sobre</a></li>
           <li><a href="contato.html">Contato</a></li>
           <li><a href="login.html">Login</a></li>
+          <li><a href="meus-relatos.html">Meus Relatos</a></li>
         </ul>
       </div>
       <div class="col-md-4">
         <h5 class="text-warning fw-bold mb-3">Contato</h5>
         <ul class="list-unstyled">
-          <li><i class="bi bi-geo-alt-fill text-warning me-2"></i>Volta Redonda - RJ</li>
+          <li><i class="bi bi-geo-alt-fill text-warning me-2"></i>Volta Redonda - RJ, Brasil</li>
           <li><i class="bi bi-envelope-fill text-warning me-2"></i>contato@resolucity.com</li>
           <li><i class="bi bi-telephone-fill text-warning me-2"></i>+55 (24) 99999-9999</li>
         </ul>
@@ -234,6 +240,8 @@
 
   document.addEventListener('DOMContentLoaded', fetchHomeWeather);
 </script>
+
+<script src="auth.js"></script>
 
 </body>
 </html>

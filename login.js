@@ -1,4 +1,4 @@
-/* LPW2 - IMPLEMENTAÇÃO DO REQUISITO 5 */
+/* LOGIN.JS - VERSÃO FINAL (Com opção Cancelar/Sair) */
 
 class UserDatabase {
     constructor() {
@@ -84,7 +84,7 @@ function clearErrors() {
     document.querySelectorAll('.error-field').forEach(el => el.classList.remove('error-field'));
 }
 
-/* MODAL FUNCIONAL */
+/* MODAL PADRÃO */
 function showModal(title, message, redirectUrl = null) {
     const modal = document.getElementById('success-modal');
     if (!modal) {
@@ -93,10 +93,15 @@ function showModal(title, message, redirectUrl = null) {
         return;
     }
 
-    document.getElementById('success-title').textContent = title;
-    document.getElementById('success-message').textContent = message;
-    
-    modal.style.display = 'flex'; // Exibe o modal corrigido
+    // Restaura estrutura padrão caso tenha sido alterada
+    const contentDiv = modal.querySelector('.success-content');
+    contentDiv.innerHTML = `
+        <h3 id="success-title" style="color: #198754; margin-bottom: 1rem;">${title}</h3>
+        <p id="success-message" class="mb-4">${message}</p>
+        <button id="close-modal" class="btn btn-warning fw-bold px-4">OK</button>
+    `;
+
+    modal.style.display = 'flex';
 
     document.getElementById('close-modal').onclick = () => {
         modal.style.display = 'none';
@@ -122,13 +127,39 @@ document.addEventListener('DOMContentLoaded', () => {
         clearErrors();
     });
 
-    // Verifica sessão ao entrar na página
+    // --- VERIFICAÇÃO DE SESSÃO (Com 2 Botões) ---
     const currentUser = db.getCurrentUser();
     if (currentUser) {
-        showModal('Sessão Ativa', `Olá, ${currentUser.name}! Você já está conectado.`, 'index.html');
+        const modal = document.getElementById('success-modal');
+        const contentDiv = modal.querySelector('.success-content');
+
+        // Modifica o HTML interno do modal apenas para essa situação
+        contentDiv.innerHTML = `
+            <h3 style="color: #198754; margin-bottom: 1rem;">Sessão Ativa</h3>
+            <p class="mb-4">Olá, <strong>${currentUser.name}</strong>! Você já está conectado.<br>Deseja sair para entrar com outra conta?</p>
+            
+            <div style="display: flex; justify-content: center; gap: 10px;">
+                <button id="btn-cancel" class="btn btn-secondary fw-bold px-4">Cancelar</button>
+                <button id="btn-logout" class="btn btn-warning fw-bold px-4">Sair</button>
+            </div>
+        `;
+        
+        modal.style.display = 'flex';
+
+        // Botão Sair: Faz logout e recarrega
+        document.getElementById('btn-logout').onclick = () => {
+            db.logout();
+            modal.style.display = 'none';
+            window.location.reload();
+        };
+
+        // Botão Cancelar: Vai para a Home (mantém logado)
+        document.getElementById('btn-cancel').onclick = () => {
+            window.location.href = 'index.html';
+        };
     }
 
-    // LOGIN
+    // LOGIN SUBMIT
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
         loginForm.addEventListener('submit', (e) => {
@@ -155,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // CADASTRO
+    // REGISTER SUBMIT
     const registerForm = document.getElementById('registerForm');
     if (registerForm) {
         registerForm.addEventListener('submit', async (e) => {

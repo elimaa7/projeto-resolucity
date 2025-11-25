@@ -26,7 +26,7 @@ body {
     font-weight: 700;
 }
 
-/* --- HEADER SUPERIOR (ALINHAMENTO FINAL) --- */
+/* --- HEADER SUPERIOR --- */
 .top-header {
     background-color: #fff;
     font-size: 0.9rem;
@@ -63,52 +63,50 @@ body {
     font-size: 1.1rem;
     position: relative;
     top: -1px;
-    /* Largura fixa para garantir alinhamento no PC também */
     width: 20px; 
     text-align: center;
 }
 
-/* --- RESPONSIVIDADE CELULAR (CORREÇÃO DOS ÍCONES) --- */
+/* --- RESPONSIVIDADE CELULAR (AJUSTE FINAL: CENTRALIZADO) --- */
 @media (max-width: 991px) {
-    /* Container: Mantém lado a lado */
+    /* 1. Container: Centraliza o grupo (Logo + Contatos) na tela */
     .top-header .container {
         flex-direction: row !important;
-        justify-content: space-between !important;
+        justify-content: center !important; /* Centraliza tudo junto */
         align-items: center !important;
-        padding-left: 15px;
-        padding-right: 15px;
+        padding-left: 10px;
+        padding-right: 10px;
+        gap: 15px; /* Espaço entre o Logo e o bloco de Contatos */
     }
 
-    /* Logo: Ajuste */
+    /* 2. Logo */
     .top-header img {
         width: 32px;
     }
     .top-header .fw-bold {
-        font-size: 1.1rem !important;
+        font-size: 1rem !important;
     }
 
-    /* Bloco de Contatos: */
+    /* 3. Bloco de Contatos: Alinhado à esquerda (ícones retos) */
     .contact-info {
-        flex-direction: column !important; /* Um embaixo do outro */
-        gap: 2px; /* Espaço pequeno */
-        
-        /* CORREÇÃO AQUI: */
-        /* Alinha os itens à ESQUERDA (flex-start) para os ícones ficarem retos */
-        align-items: flex-start !important; 
-        
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 2px;
+        align-items: flex-start !important; /* Ícones alinhados verticalmente */
         width: auto;
     }
     
     .contact-item {
-        font-size: 0.7rem; /* Fonte ajustada */
-        justify-content: flex-start; /* Texto começa logo após ícone */
+        font-size: 0.7rem; 
+        display: flex;
+        align-items: center;
         white-space: nowrap;
     }
 
     .contact-item i {
-        font-size: 0.9rem;
-        text-align: center; /* Ícone centralizado no seu espaço */
-        width: 18px; /* Espaço fixo para o ícone */
+        font-size: 0.85rem;
+        width: 18px;
+        text-align: center;
         margin-right: 4px;
     }
 }
@@ -263,3 +261,40 @@ body {
 .footer { background-color: #0c0c0c; font-size: 0.95rem; color: #ccc; padding: 3rem 0; margin-top: auto; }
 .footer a { color: #bbb; text-decoration: none; }
 .footer a:hover { color: var(--amarelo); }
+
+/* MODAL GLOBAL */
+.success-message {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    animation: fadeIn 0.4s ease;
+}
+
+.success-content {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 12px;
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    color: #333;
+}
+
+.success-content h3 {
+    color: #198754;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
