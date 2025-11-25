@@ -1,5 +1,5 @@
-/* MEUS-RELATOS.JS
-   Lógica para listar e EXCLUIR os relatos do usuário logado
+/* MEUS-RELATOS.JS - CORRIGIDO (Modal Personalizado)
+   Lógica para listar e EXCLUIR os relatos com modal bonito
 */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -27,13 +27,11 @@ function renderReports() {
     const user = JSON.parse(sessionUser);
     const userEmail = user.email;
 
-    // 2. Buscar Relatos no Banco Local
+    // 2. Buscar Relatos
     const allReports = JSON.parse(localStorage.getItem('resolucity_reports_v1') || '[]');
-    
-    // 3. Filtrar apenas os relatos deste usuário
     const myReports = allReports.filter(report => report.userId === userEmail);
 
-    // 4. Renderizar
+    // 3. Renderizar
     if (myReports.length === 0) {
         container.innerHTML = `
             <div class="text-center p-5 bg-white rounded shadow-sm">
@@ -44,7 +42,6 @@ function renderReports() {
             </div>
         `;
     } else {
-        // Ordenar por data (mais recente primeiro)
         myReports.sort((a, b) => b.id - a.id);
 
         let html = '';
@@ -74,7 +71,7 @@ function renderReports() {
                         </p>
                         
                         <div class="d-flex justify-content-end mt-3">
-                            <button onclick="deleteReport(${report.id})" class="btn btn-sm btn-outline-danger fw-bold">
+                            <button onclick="showDeleteModal(${report.id})" class="btn btn-sm btn-outline-danger fw-bold">
                                 <i class="bi bi-trash-fill me-1"></i> Excluir
                             </button>
                         </div>
@@ -86,22 +83,50 @@ function renderReports() {
     }
 }
 
-// FUNÇÃO DE EXCLUIR (Global para o onclick funcionar)
-window.deleteReport = function(id) {
-    if (confirm("Tem certeza que deseja excluir este relato? Essa ação não pode ser desfeita.")) {
-        // 1. Pega todos os relatos
-        const allReports = JSON.parse(localStorage.getItem('resolucity_reports_v1') || '[]');
-        
-        // 2. Filtra removendo o ID selecionado
-        const updatedReports = allReports.filter(report => report.id !== id);
-        
-        // 3. Salva a nova lista
-        localStorage.setItem('resolucity_reports_v1', JSON.stringify(updatedReports));
-        
-        // 4. Recarrega a lista na tela
-        renderReports();
-        
-        // Opcional: Feedback visual rápido (Toast ou Alert)
-        // alert("Relato excluído com sucesso."); 
-    }
+// --- MODAL DE EXCLUSÃO PERSONALIZADO ---
+window.showDeleteModal = function(id) {
+    // Remove modal anterior se existir
+    let existingModal = document.getElementById('delete-confirm-modal');
+    if (existingModal) existingModal.remove();
+
+    // Cria o modal dinamicamente
+    const modal = document.createElement('div');
+    modal.id = 'delete-confirm-modal';
+    modal.className = 'success-message'; // Reusa o estilo global de modal
+    
+    modal.innerHTML = `
+        <div class="success-content">
+            <h3 class="text-danger mb-3 fw-bold">Excluir Relato?</h3>
+            <p class="mb-4 text-muted">Essa ação não pode ser desfeita. Tem certeza?</p>
+            
+            <div class="d-flex justify-content-center gap-3">
+                <button id="btn-confirm-delete" class="btn btn-danger fw-bold px-4">Excluir</button>
+                <button id="btn-cancel-delete" class="btn btn-secondary fw-bold px-4">Cancelar</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Exibe o modal
+    modal.style.display = 'flex';
+
+    // Ação Confirmar
+    document.getElementById('btn-confirm-delete').onclick = () => {
+        deleteReport(id);
+        modal.remove();
+    };
+
+    // Ação Cancelar
+    document.getElementById('btn-cancel-delete').onclick = () => {
+        modal.remove();
+    };
 };
+
+// Função que realmente apaga (chamada pelo modal)
+function deleteReport(id) {
+    const allReports = JSON.parse(localStorage.getItem('resolucity_reports_v1') || '[]');
+    const updatedReports = allReports.filter(report => report.id !== id);
+    localStorage.setItem('resolucity_reports_v1', JSON.stringify(updatedReports));
+    renderReports(); // Atualiza a lista na tela
+}
