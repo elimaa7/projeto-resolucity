@@ -8,20 +8,16 @@
     color: var(--amarelo);
 }
 
-
 /* FUNDO DA PÁGINA DE LOGIN */
-
 .login-section {
-    min-height: 90vh;
+    min-height: 80vh; /* Ajuste para centralizar melhor */
     background: linear-gradient(rgba(15, 15, 15, 0.8), rgba(15, 15, 15, 0.8)),
                 url("imagens/belo-edificio-empire-state-brilhante-a-noite.jpg") 
                 center/cover no-repeat;
     padding: 60px 15px;
 }
 
-
 /* CARD CENTRAL */
-
 .login-card {
     background: #fff;
     border-radius: 14px;
@@ -32,24 +28,22 @@
     animation: fadeIn 0.6s ease;
 }
 
-
 /* INPUTS */
-
 .custom-input {
     border: 2px solid #ddd;
     border-radius: 10px;
     padding: 10px;
+    width: 100%; /* Garante largura total */
     transition: border 0.3s, box-shadow 0.3s;
+    outline: none;
 }
 
 .custom-input:focus {
     border-color: var(--amarelo);
-    box-shadow: 0 0 8px rgba(255,204,0,0.6);
+    box-shadow: 0 0 8px rgba(255,204,0,0.4);
 }
 
-
 /* BOTÃO PADRÃO AMARELO */
-
 .btn-yellow {
     background: var(--amarelo);
     border: none;
@@ -57,6 +51,7 @@
     font-weight: 700;
     color: var(--preto);
     border-radius: 8px;
+    width: 100%;
     transition: 0.3s;
 }
 
@@ -65,14 +60,7 @@
     transform: scale(1.04);
 }
 
-
 /* ALTERNAÇÃO DE FORMULÁRIOS */
-
-.switch-form {
-    margin-top: 15px;
-    text-align: center;
-}
-
 .switch-form a {
     cursor: pointer;
     color: var(--amarelo);
@@ -84,77 +72,7 @@
     text-decoration: underline;
 }
 
- /* ===== FOOTER ===== */
-.footer {
-  background-color: #0c0c0c;
-  font-size: 0.95rem;
-}
-
-.footer h5 {
-  letter-spacing: 0.5px;
-}
-
-.footer p {
-  color: #ccc;
-  line-height: 1.6;
-}
-
-.footer a {
-  color: #bbb;
-  text-decoration: none;
-  transition: 0.3s;
-}
-
-.footer a:hover {
-  color: var(--amarelo);
-  padding-left: 3px;
-}
-
-.footer .social-icons a:hover {
-  color: var(--amarelo);
-  transform: scale(1.1);
-  transition: all 0.3s;
-}
-
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(12px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.form-box {
-    animation: fadeIn 0.4s ease;
-}
-
-.hidden, .d-none {
-    display: none !important;
-}
-
-.form-group {
-    margin-bottom: 15px;
-    display: flex;
-    flex-direction: column;
-}
-
-.form-group label {
-    font-weight: 600;
-    margin-bottom: 6px;
-    color: #333;
-}
-
-.form-group input {
-    border: 2px solid #ddd;
-    border-radius: 10px;
-    padding: 10px;
-    transition: border 0.3s, box-shadow 0.3s;
-    outline: none;
-}
-
-.form-group input:focus {
-    border-color: var(--amarelo);
-    box-shadow: 0 0 8px rgba(255,204,0,0.4);
-}
-
+/* ESTILOS DE ERRO */
 .error {
     color: #dc3545;
     font-size: 0.85rem;
@@ -163,39 +81,60 @@
     font-weight: 500;
 }
 
-.error.show {
-    display: block;
-}
-
 .error-field {
     border-color: #dc3545 !important;
 }
 
-.btn-primary,
-.btn-yellow, 
-button.btn-primary {
-    background: var(--amarelo);
-    border: none;
-    padding: 12px;
-    border-radius: 8px;
-    font-weight: 700;
-    color: var(--preto);
+/* MODAL DE SUCESSO (CORRIGIDO) */
+.success-message {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
-    transition: 0.3s;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85); /* Fundo escuro */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000; /* Fica acima de tudo */
+    animation: fadeIn 0.4s ease;
 }
 
-.btn-primary:hover,
-.btn-yellow:hover {
-    background: #e6b800;
-    transform: scale(1.04);
+.success-content {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 12px;
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
-.login-card {
-    text-align: left;
+.success-content h3 {
+    color: #198754;
+    margin-bottom: 1rem;
 }
 
-.subtitle-op1 {
-    font-size: 1.3rem;
-    font-weight: 700;
-    margin-bottom: 20px;
+/* Animação */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
+
+/* Utilitários */
+.d-none { display: none !important; }
+.form-group { margin-bottom: 15px; }
+.subtitle-op1 { font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; }
+
+/* FOOTER */
+.footer {
+  background-color: #0c0c0c;
+  font-size: 0.95rem;
+  color: #ccc;
+}
+.footer a {
+  color: #bbb;
+  text-decoration: none;
+  transition: 0.3s;
+}
+.footer a:hover { color: var(--amarelo); }

@@ -1,3 +1,4 @@
+/* VARIÁVEIS GLOBAIS */
 :root {
     --amarelo: #ffcc00;
     --preto: #0c0c0c;
@@ -5,9 +6,19 @@
     --cinza-100: #f8f9fa;
 }
 
+/* BASE E CONFIGURAÇÕES GERAIS */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
 body {
     font-family: "Poppins", sans-serif;
+    background-color: var(--cinza);
     scroll-behavior: smooth;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 .text-yellow {
@@ -15,34 +26,100 @@ body {
     font-weight: 700;
 }
 
-/*HEADER SUPERIOR*/
+/* --- HEADER SUPERIOR (ALINHAMENTO FINAL) --- */
 .top-header {
     background-color: #fff;
     font-size: 0.9rem;
+    padding: 8px 0;
+    border-bottom: 1px solid #e0e0e0;
 }
 
-.top-header i {
-    font-size: 1rem;
+/* PC: Configuração Padrão */
+.top-header .container {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
 }
 
-@media (max-width: 768px) {
+/* PC: Contatos em linha */
+.contact-info {
+    display: flex !important;
+    align-items: center !important;
+    gap: 25px;
+    margin: 0;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #666;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.contact-item i {
+    color: var(--amarelo);
+    font-size: 1.1rem;
+    position: relative;
+    top: -1px;
+    /* Largura fixa para garantir alinhamento no PC também */
+    width: 20px; 
+    text-align: center;
+}
+
+/* --- RESPONSIVIDADE CELULAR (CORREÇÃO DOS ÍCONES) --- */
+@media (max-width: 991px) {
+    /* Container: Mantém lado a lado */
+    .top-header .container {
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    /* Logo: Ajuste */
+    .top-header img {
+        width: 32px;
+    }
+    .top-header .fw-bold {
+        font-size: 1.1rem !important;
+    }
+
+    /* Bloco de Contatos: */
     .contact-info {
-        flex-direction: column;
-        align-items: flex-start;
+        flex-direction: column !important; /* Um embaixo do outro */
+        gap: 2px; /* Espaço pequeno */
+        
+        /* CORREÇÃO AQUI: */
+        /* Alinha os itens à ESQUERDA (flex-start) para os ícones ficarem retos */
+        align-items: flex-start !important; 
+        
+        width: auto;
     }
-    .contact-info div {
-        margin-bottom: 5px;
+    
+    .contact-item {
+        font-size: 0.7rem; /* Fonte ajustada */
+        justify-content: flex-start; /* Texto começa logo após ícone */
+        white-space: nowrap;
+    }
+
+    .contact-item i {
+        font-size: 0.9rem;
+        text-align: center; /* Ícone centralizado no seu espaço */
+        width: 18px; /* Espaço fixo para o ícone */
+        margin-right: 4px;
     }
 }
 
+/* NAVBAR */
 .navbar {
-    background: rgba(0,0,0,0.6);
-    backdrop-filter: blur(10px);
-    transition: background 0.3s ease;
-}
-
-.navbar.scrolled {
     background: var(--preto);
+    padding: 10px 0 !important;
+    min-height: 72px;
+    display: flex;
+    align-items: center;
 }
 
 .navbar-nav .nav-link {
@@ -56,12 +133,13 @@ body {
     color: var(--amarelo) !important;
 }
 
-/* Botão login */
+/* BOTÕES */
 .btn-warning {
     background-color: var(--amarelo) !important;
     border: none;
     transition: 0.3s;
     font-weight: 600;
+    color: var(--preto) !important;
 }
 
 .btn-warning:hover {
@@ -69,13 +147,58 @@ body {
     transform: scale(1.05);
 }
 
+/* Botão Amarelo Hero */
+.btn-yellow {
+    background-color: var(--amarelo) !important;
+    color: var(--preto) !important;
+    font-weight: 700;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 6px;
+    text-decoration: none;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+    border: 2px solid var(--amarelo) !important;
+    min-width: 200px; 
+}
+
+.btn-yellow:hover {
+    background-color: #e6b800 !important;
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(255, 204, 0, 0.4);
+}
+
+/* Botão Transparente Hero */
+.btn-outline-light {
+    color: #fff !important;
+    font-weight: 600;
+    border: 2px solid #fff !important;
+    padding: 12px 30px;
+    border-radius: 6px;
+    text-decoration: none;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+    min-width: 200px;
+}
+
+.btn-outline-light:hover {
+    background-color: #fff !important;
+    color: var(--preto) !important;
+    transform: scale(1.05);
+}
+
+/* HERO INDEX */
 .hero {
     background: linear-gradient(rgba(104,100,100,0.6), rgba(20,20,20,0.6)),
                 url('imagens/belo-edificio-empire-state-brilhante-a-noite.jpg')
                 center/cover no-repeat;
     color: white;
     text-align: center;
-    padding: 10rem 1rem; 
+    padding: 10rem 1rem;
 }
 
 .hero h1 {
@@ -89,17 +212,15 @@ body {
     opacity: 0.9;
 }
 
-
+/* WIDGET CLIMA */
 .weather-badge {
     position: absolute;
-    top: -9rem; 
-    right: 12px;
+    top: -8.5rem; 
+    right: 0; 
     z-index: 10;
-
     background: rgba(255, 255, 255, 0.02);
     backdrop-filter: blur(4px);
     border: 1px solid rgba(255, 255, 255, 0.08);
-    
     padding: 8px 25px;
     border-radius: 50px;
     display: inline-flex;
@@ -113,7 +234,6 @@ body {
     text-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
-/* Mobile: Ajuste para não sair da tela */
 @media (max-width: 992px) {
     .weather-badge {
         position: relative;
@@ -130,142 +250,16 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
-.btn-yellow {
-    background-color: var(--amarelo);
-    color: var(--preto);
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
-
-.btn-yellow:hover {
-    background-color: #e6b800;
-    transform: scale(1.05);
-}
-
-/*DESTAQUES (CARDS AMARELOS) */
-.highlight-section {
-    background-color: var(--amarelo);
-    padding: 5rem 0;
-}
-
-.highlight-section .card {
-    border: none;
-    border-radius: 12px;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    background-color: #fff;
-}
-
-.highlight-section .card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-}
-
-.highlight-section img {
-    height: 220px;
-    object-fit: cover;
-}
-
-/*SOBRE (SECTION)*/
-.about {
-    padding: 5rem 0;
-    background-color: var(--cinza);
-}
-
-.about img {
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-}
-
-/*SERVIÇOS*/
-.services {
-    padding: 5rem 0;
-    text-align: center;
-}
-
-.services i {
-    font-size: 3rem;
-    color: var(--amarelo);
-    margin-bottom: 1rem;
-    transition: transform 0.3s ease;
-}
-
-.services i:hover {
-    transform: scale(1.2);
-}
-
-/* FOOTER*/
-.footer {
-    background-color: #0c0c0c;
-    font-size: 0.95rem;
-    color: #ccc;
-}
-
-.footer h5 {
-    letter-spacing: 0.5px;
-}
-
-.footer a {
-    color: #bbb;
-    text-decoration: none;
-    transition: 0.3s;
-}
-
-.footer a:hover {
-    color: #ffcc00;
-    padding-left: 3px;
-}
-
-.footer .social-icons a:hover {
-    color: var(--amarelo);
-    transform: scale(1.1);
-}
-
-.hero-compact {
-    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.35)),
-                url('imagens/pixnio-4840x3227.jpg') center/cover no-repeat;
-    padding: 3.5rem 0;
-}
-
-.stats-card {
-    background: #fff;
-    border-radius: 14px;
-    transition: transform .3s ease, box-shadow .3s ease;
-}
-
-.stats-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 10px 26px rgba(0,0,0,0.1);
-}
-
-.chart-box, 
-.chart-card, 
-.map-card {
-    min-height: 260px;
-    max-height: 520px;
-    height: 100%;
-    border-radius: 14px;
-    position: relative;
-}
-
-.chart-box canvas,
-.chart-card canvas {
-    width: 100% !important;
-    height: 100% !important;
-    display: block;
-}
-
-@media (max-width: 768px) {
-    .chart-box, .chart-card {
-        min-height: 300px;
-    }
-}
-
-@media (max-width: 576px) {
-    .hero h1 {
-        font-size: 2.3rem;
-    }
-    .hero {
-        padding: 6rem 1rem;
-    }
-}
+/* SEÇÕES GERAIS */
+.highlight-section { background-color: var(--amarelo); padding: 5rem 0; }
+.highlight-section .card { border: none; border-radius: 12px; overflow: hidden; transition: all 0.3s ease; }
+.highlight-section img { height: 220px; object-fit: cover; }
+.about { padding: 5rem 0; background-color: var(--cinza); }
+.services { padding: 5rem 0; text-align: center; }
+.services i { font-size: 3rem; color: var(--amarelo); margin-bottom: 1rem; }
+.hero-compact { background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.35)), url('imagens/pixnio-4840x3227.jpg') center/cover no-repeat; padding: 3.5rem 0; text-align: center; color: white; }
+.chart-box { background: #fff; padding: 20px; border-radius: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); width: 100%; overflow: hidden; }
+.chart-container { position: relative; height: 300px; width: 100%; }
+.footer { background-color: #0c0c0c; font-size: 0.95rem; color: #ccc; padding: 3rem 0; margin-top: auto; }
+.footer a { color: #bbb; text-decoration: none; }
+.footer a:hover { color: var(--amarelo); }

@@ -1,3 +1,5 @@
+/* RELATAR.JS - CORRIGIDO (Limpa erros em tempo real) */
+
 class FormValidator {
     constructor(formId) {
         this.form = document.getElementById(formId);
@@ -11,7 +13,7 @@ class FormValidator {
             phone: { el: document.getElementById('phone'), errorId: 'phoneError' },
             email: { el: document.getElementById('email'), errorId: 'emailError' },
             categoria: { el: document.getElementById('categoria'), errorId: 'categoriaError' },
-            cep: { el: document.getElementById('cep'), errorId: 'cepError' }, // NOVO CAMPO
+            cep: { el: document.getElementById('cep'), errorId: 'cepError' }, 
             endereco: { el: document.getElementById('endereco'), errorId: 'enderecoError' },
             message: { el: document.getElementById('message'), errorId: 'messageError' },
             foto: { el: document.getElementById('foto'), errorId: 'fotoError' }
@@ -19,12 +21,78 @@ class FormValidator {
 
         this.init();
         this.checkUserSession();
+        this.fetchWeather(); 
+    }
+
+    // --- INICIALIZAÇÃO ---
+    init() {
+        this.applyMasks();
+        this.addRealTimeValidation(); // <--- NOVA FUNÇÃO ADICIONADA
+
+        // Busca CEP no Blur (quando sai do campo)
+        if (this.fields.cep.el) {
+            this.fields.cep.el.addEventListener('blur', (e) => {
+                this.fetchAddressByCEP(e.target.value);
+            });
+        }
+
+        this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+    }
+
+    // --- CORREÇÃO: LIMPA ERROS ENQUANTO DIGITA/SELECIONA ---
+    addRealTimeValidation() {
+        Object.keys(this.fields).forEach(key => {
+            const field = this.fields[key];
+            if (field && field.el) {
+                // Define qual evento ouvir: 'change' para selects/arquivos, 'input' para textos
+                const eventType = (field.el.tagName === 'SELECT' || field.el.type === 'file') ? 'change' : 'input';
+                
+                field.el.addEventListener(eventType, () => {
+                    this.clearFieldError(key);
+                });
+            }
+        });
+    }
+
+    // --- REQUISITO: API DE CLIMA (OPEN-METEO) ---
+    async fetchWeather() {
+        const widget = document.getElementById('weather-widget');
+        const tempDisplay = document.getElementById('temp-display');
+        const descDisplay = document.getElementById('weather-desc');
+        
+        const lat = -22.5232;
+        const lon = -44.1041;
+
+        try {
+            const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
+            const data = await response.json();
+            
+            if (data.current_weather) {
+                const temp = data.current_weather.temperature;
+                const code = data.current_weather.weathercode;
+                const description = this.getWeatherDescription(code);
+
+                tempDisplay.textContent = `${temp}°C`;
+                descDisplay.textContent = description;
+                widget.classList.remove('d-none');
+            }
+        } catch (error) {
+            console.error("Erro ao carregar clima:", error);
+        }
+    }
+
+    getWeatherDescription(code) {
+        if (code === 0) return "Céu Limpo";
+        if (code >= 1 && code <= 3) return "Parcialmente Nublado";
+        if (code >= 45 && code <= 48) return "Nevoeiro";
+        if (code >= 51 && code <= 67) return "Chuva Fraca/Moderada";
+        if (code >= 80 && code <= 99) return "Chuva Forte / Tempestade";
+        return "Clima Variável";
     }
 
     // --- INTEGRAÇÃO COM LOGIN ---
     checkUserSession() {
         const sessionUser = localStorage.getItem('resolucity_session_v1');
-        
         if (sessionUser) {
             try {
                 const user = JSON.parse(sessionUser);
@@ -40,27 +108,11 @@ class FormValidator {
         }
     }
 
-    init() {
-        this.applyMasks();
-        
-        // Adiciona evento específico para buscar CEP quando sair do campo
-        if (this.fields.cep.el) {
-            this.fields.cep.el.addEventListener('blur', (e) => {
-                this.fetchAddressByCEP(e.target.value);
-            });
-        }
-
-        this.form.addEventListener('submit', (e) => this.handleSubmit(e));
-    }
-
-    // --- REQUISITO: CONSUMO DE API (VIACEP) ---
+    // --- API VIACEP ---
     async fetchAddressByCEP(cep) {
-        // Limpa formatação para deixar apenas números
         const cleanCep = cep.replace(/\D/g, '');
-        
-        if (cleanCep.length !== 8) return; // Só busca se tiver 8 números
+        if (cleanCep.length !== 8) return;
 
-        // Feedback visual (opcional)
         if (this.fields.endereco.el) {
             this.fields.endereco.el.value = "Buscando endereço...";
             this.fields.endereco.el.disabled = true;
@@ -77,17 +129,14 @@ class FormValidator {
                     this.fields.endereco.el.disabled = false;
                 }
             } else {
-                // SUCESSO: Preenche o endereço
                 this.clearFieldError('cep');
                 if (this.fields.endereco.el) {
                     this.fields.endereco.el.value = `${data.logradouro}, ${data.bairro} - ${data.localidade}/${data.uf}`;
                     this.fields.endereco.el.disabled = false;
-                    // Limpa erro do endereço caso exista
-                    this.clearFieldError('endereco');
+                    this.clearFieldError('endereco'); // Limpa erro de endereço se existir
                 }
             }
         } catch (error) {
-            console.error('Erro ViaCEP:', error);
             if (this.fields.endereco.el) {
                 this.fields.endereco.el.value = "";
                 this.fields.endereco.el.disabled = false;
@@ -97,7 +146,6 @@ class FormValidator {
     }
 
     applyMasks() {
-        // Máscara CPF
         if (this.fields.cpf.el) {
             this.fields.cpf.el.addEventListener('input', (e) => {
                 let v = e.target.value.replace(/\D/g, '');
@@ -108,7 +156,6 @@ class FormValidator {
                 e.target.value = v;
             });
         }
-        // Máscara Telefone
         if (this.fields.phone.el) {
             this.fields.phone.el.addEventListener('input', (e) => {
                 let v = e.target.value.replace(/\D/g, '');
@@ -118,7 +165,6 @@ class FormValidator {
                 e.target.value = v;
             });
         }
-        // Máscara CEP
         if (this.fields.cep.el) {
             this.fields.cep.el.addEventListener('input', (e) => {
                 let v = e.target.value.replace(/\D/g, '');
@@ -129,7 +175,6 @@ class FormValidator {
         }
     }
 
-    // Auxiliares de erro
     showFieldError(fieldKey, message) {
         const field = this.fields[fieldKey];
         const errorEl = document.getElementById(field.errorId);
@@ -197,10 +242,8 @@ class FormValidator {
 
     handleSubmit(e) {
         e.preventDefault();
-        
         let isValid = true;
-        // Valida todos os campos (incluindo CEP agora)
-        const keys = ['name', 'cpf', 'nascimento', 'phone', 'email', 'categoria', 'cep', 'endereco', 'message'];
+        const keys = Object.keys(this.fields).filter(k => k !== 'foto');
         
         keys.forEach(key => {
             if (!this.validateField(key)) isValid = false;
@@ -213,7 +256,6 @@ class FormValidator {
 
     showSuccess() {
         let successDiv = document.querySelector('.success-message');
-        
         if (!successDiv) {
             successDiv = document.createElement('div');
             successDiv.className = 'success-message';
@@ -228,20 +270,10 @@ class FormValidator {
         } else {
             successDiv.style.display = 'flex';
         }
-        
         this.form.reset();
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     new FormValidator('contactForm');
-    
-    // Menu mobile
-    const menuToggle = document.querySelector('.menu-toggle');
-    const navLinks = document.querySelector('.nav-links');
-    if (menuToggle && navLinks) {
-        menuToggle.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-        });
-    }
 });

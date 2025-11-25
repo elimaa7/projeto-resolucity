@@ -4,25 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Resolucity | Cidadania em Ação</title>
-
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
-  <link rel="icon" href="imagens/logo.png" type="image/x-icon">
-
   <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="imagens/logo.png" type="image/x-icon">
 </head>
-
 <body>
 
 <header>
-  <div class="top-header py-2 border-bottom bg-light">
+  <div class="top-header py-2 border-bottom bg-white">
     <div class="container d-flex justify-content-between align-items-center flex-wrap text-dark">
       <div class="d-flex align-items-center">
         <img src="imagens/logo.png" alt="logo" width="40" class="me-2">
         <span class="fw-bold fs-5 text-uppercase">Resolucity</span>
       </div>
-      <div class="contact-info d-flex flex-wrap align-items-center small text-secondary">
+      <div class="contact-info d-flex flex-wrap align-items-center text-secondary small mt-2 mt-md-0">
         <div class="me-4 d-flex align-items-center">
           <i class="bi bi-envelope-fill text-warning me-1"></i>
           <span>contato@resolucity.com</span>
@@ -39,16 +36,15 @@
     </div>
   </div>
 
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
         <span class="navbar-toggler-icon"></span>
       </button>
-
       <div class="collapse navbar-collapse justify-content-between" id="menu">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item"><a class="nav-link active" href="index.html">Início</a></li>
-          <li class="nav-item"><a class="nav-link" href="estatisticas.html">Estatísticas</a></li>
+        <ul class="navbar-nav">
+          <li class="nav-item"><a class="nav-link" href="index.html">Início</a></li>
+          <li class="nav-item"><a class="nav-link active" href="estatisticas.html">Estatísticas</a></li>
           <li class="nav-item"><a class="nav-link" href="sobre.html">Sobre</a></li>
           <li class="nav-item"><a class="nav-link" href="contato.html">Contato</a></li>
         </ul>
@@ -58,23 +54,23 @@
   </nav>
 </header>
 
-<section class="hero text-center d-flex align-items-center" data-aos="fade-up">
-  
+<section class="hero text-center" data-aos="fade-up">
   <div class="container position-relative">
     
     <div id="weather-badge" class="weather-badge d-none fade-in">
       <i class="bi bi-cloud-sun-fill text-warning me-2 fs-4"></i>
       <span class="fw-bold me-2">Volta Redonda:</span>
       <span id="home-temp" class="fw-bold text-warning">--°C</span>
-      <span id="home-desc" class="ms-2 opacity-75 small">Carregando...</span>
+      <span id="home-desc" class="ms-2 opacity-75 small"></span>
     </div>
 
-    <div class="hero-content mt-5 pt-3"> <h1 class="fw-bold">Juntos por uma cidade melhor</h1>
+    <div class="hero-content mt-5">
+      <h1 class="fw-bold">Juntos por uma cidade melhor</h1>
       <p>Relate, acompanhe e transforme o ambiente urbano com colaboração cidadã.</p>
 
-      <div class="mt-4">
-        <a href="relatar.html" class="btn btn-yellow btn-lg me-3">Fazer Relato</a>
-        <a href="categorias.html" class="btn btn-outline-light btn-lg">Ver Categorias</a>
+      <div class="mt-4 d-flex flex-column flex-sm-row justify-content-center align-items-center gap-3">
+        <a href="relatar.html" class="btn btn-yellow">Fazer Relato</a>
+        <a href="categorias.html" class="btn btn-outline-light">Ver Categorias</a>
       </div>
     </div>
 
@@ -99,7 +95,7 @@
           <img src="imagens/transparencia-publica-municipal.jpg" class="card-img-top" alt="Transparência">
           <div class="card-body">
             <h5 class="fw-bold">Transparência Pública</h5>
-            <p>Acompanhe relatórios e dados sobre as ações tomadas com base nos relatos enviados.</p>
+            <p>Acompanhe relatórios e dados sobre as ações tomadas.</p>
             <a href="estatisticas.html" class="fw-semibold text-dark">Ver dados →</a>
           </div>
         </div>
@@ -123,7 +119,7 @@
     <div class="row align-items-center gy-4">
       <div class="col-md-6" data-aos="fade-right">
         <h2 class="fw-bold mb-4">Sobre o <span class="text-yellow">Resolucity</span></h2>
-        <p>O <span class="text-yellow">Resolucity</span> é uma plataforma digital que transforma relatos anônimos em dados estratégicos, fortalecendo a transparência e a eficiência urbana.</p>
+        <p>O <span class="text-yellow">Resolucity</span> é uma plataforma digital que transforma relatos anônimos em dados estratégicos.</p>
         <a href="sobre.html" class="btn btn-dark mt-3">Saiba mais</a>
       </div>
       <div class="col-md-6" data-aos="fade-left">
@@ -161,10 +157,10 @@
     <div class="row gy-4">
       <div class="col-md-4">
         <h5 class="text-warning fw-bold mb-3">Sobre o Resolucity</h5>
-        <p>Conectando cidadãos e administração pública por meio de relatos anônimos e dados transparentes.</p>
+        <p>Conectando cidadãos e administração pública.</p>
       </div>
       <div class="col-md-4">
-        <h5 class="text-warning fw-bold mb-3">Links Rápidos</h5>
+        <h5 class="text-warning fw-bold mb-3">Links</h5>
         <ul class="list-unstyled">
           <li><a href="index.html">Início</a></li>
           <li><a href="estatisticas.html">Estatísticas</a></li>
@@ -176,7 +172,7 @@
       <div class="col-md-4">
         <h5 class="text-warning fw-bold mb-3">Contato</h5>
         <ul class="list-unstyled">
-          <li><i class="bi bi-geo-alt-fill text-warning me-2"></i>Volta Redonda - RJ, Brasil</li>
+          <li><i class="bi bi-geo-alt-fill text-warning me-2"></i>Volta Redonda - RJ</li>
           <li><i class="bi bi-envelope-fill text-warning me-2"></i>contato@resolucity.com</li>
           <li><i class="bi bi-telephone-fill text-warning me-2"></i>+55 (24) 99999-9999</li>
         </ul>
@@ -228,7 +224,7 @@
               else if(code >= 80) desc = "Tempestade";
 
               tempEl.textContent = `${temp}°C`;
-              descEl.textContent = desc;
+              descEl.textContent = desc; 
               badge.classList.remove('d-none');
           }
       } catch (e) {

@@ -5,6 +5,7 @@
     --cinza: #f5f5f5;
 }
 
+/* CONTAINER GERAL DA PÁGINA*/
 body {
     background-color: var(--cinza);
 }
@@ -27,6 +28,7 @@ body {
     box-shadow: 0 4px 16px rgba(0,0,0,0.12);
 }
 
+/* Campos */
 .form-group label {
     font-weight: 600;
     color: var(--preto);
@@ -46,8 +48,9 @@ body {
     box-shadow: 0 0 6px rgba(255, 204, 0, 0.6);
 }
 
-button,
-.btn-warning {
+/* BOTÃO DO FORMULÁRIO */
+.form-container button,
+.form-container .btn-warning {
     background: var(--amarelo);
     color: var(--preto);
     border: none;
@@ -58,12 +61,13 @@ button,
     transition: .3s;
 }
 
-button:hover,
-.btn-warning:hover {
+.form-container button:hover,
+.form-container .btn-warning:hover {
     background: #e6b800;
     transform: scale(1.03);
 }
 
+/* Mensagens de erro */
 .error {
     color: #dc3545;
     display: none;
@@ -76,6 +80,7 @@ button:hover,
     border-color: #dc3545 !important;
 }
 
+/* Modal de Sucesso */
 .success-message {
     position: fixed;
     top: 0;
@@ -109,20 +114,37 @@ button:hover,
     to { opacity: 1; }
 }
 
-/* BLOCO DE INFORMAÇÕES LATERAL*/
+/* BLOCO DE INFORMAÇÕES LATERAL (CORRIGIDO) */
 .info-container {
     flex: 1;
     min-width: 300px;
     background: var(--preto);
-    color: #eee;
     padding: 2rem;
     border-radius: 12px;
     box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    
+    /* Garante que o texto base seja branco */
+    color: #ffffff !important;
 }
 
+/* Título Amarelo */
 .info-container h4 {
-    color: var(--amarelo);
+    color: var(--amarelo) !important;
     font-weight: 700;
+}
+
+/* Força texto branco para qualquer item dentro da caixa preta */
+.info-container p, 
+.info-container a, 
+.info-container span,
+.info-container .contact-item {
+    color: #ffffff !important;
+    text-decoration: none;
+}
+
+/* Mantém os ícones amarelos */
+.info-container i {
+    color: var(--amarelo) !important;
 }
 
 .contact-item {
@@ -133,7 +155,6 @@ button:hover,
 }
 
 .contact-item i {
-    color: var(--amarelo);
     margin-right: .7rem;
     font-size: 1.3rem;
 }
@@ -142,9 +163,14 @@ button:hover,
 .social-icons a {
     text-decoration: none;
     margin-right: 1rem;
-    color: var(--amarelo);
     font-size: 1.7rem;
     transition: .3s ease;
+}
+
+/* Força ícones sociais amarelos */
+.social-icons a, 
+.social-icons a i {
+    color: var(--amarelo) !important;
 }
 
 .social-icons a:hover {

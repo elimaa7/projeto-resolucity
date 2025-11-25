@@ -1,3 +1,5 @@
+/* LPW2 - IMPLEMENTAÇÃO DO REQUISITO 5 */
+
 class UserDatabase {
     constructor() {
         this.dbKey = 'resolucity_users_v1';
@@ -23,58 +25,45 @@ class UserDatabase {
         return JSON.parse(localStorage.getItem(this.dbKey) || '[]');
     }
 
-    // READ: Busca usuário por email
     findUserByEmail(email) {
         const users = this.getAllUsers();
         return users.find(u => u.email.toLowerCase() === email.toLowerCase());
     }
 
-    // AUTH: Valida credenciais
     authenticate(email, password) {
         const users = this.getAllUsers();
         return users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
     }
 
-    // SESSION: Salva usuário logado
     login(user) {
-        // Remove a senha antes de salvar na sessão por segurança
         const { password, ...safeUser } = user;
         localStorage.setItem(this.sessionKey, JSON.stringify(safeUser));
     }
 
-    // SESSION: Retorna usuário logado
     getCurrentUser() {
         return JSON.parse(localStorage.getItem(this.sessionKey));
     }
 
-    // SESSION: Logout
     logout() {
         localStorage.removeItem(this.sessionKey);
     }
 }
 
-// Instância do Banco de Dados
 const db = new UserDatabase();
 
-// Função para consumir uma API externa durante o cadastro
-// Usaremos a Agify.io para estimar a idade baseada no nome
+/* API SIMULADA */
 async function fetchUserDataFromAPI(name) {
     try {
         const firstName = name.split(' ')[0];
         const response = await fetch(`https://api.agify.io?name=${firstName}&country_id=BR`);
         if (!response.ok) throw new Error('Falha na API');
         const data = await response.json();
-        return {
-            estimatedAge: data.age || 'Não estimado',
-            apiSyncDate: new Date().toISOString()
-        };
+        return { estimatedAge: data.age || 'Não estimado' };
     } catch (error) {
-        console.warn('Erro ao consumir API externa:', error);
-        return { error: 'API indisponível no momento' };
+        return { error: 'API indisponível' };
     }
 }
 
-/* --- VALIDAÇÕES DE FORMULÁRIO --- */
 function validateEmail(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
@@ -87,9 +76,7 @@ function showError(fieldId, message) {
         errorEl.textContent = message;
         errorEl.style.display = 'block';
     }
-    if (inputEl) {
-        inputEl.classList.add('error-field');
-    }
+    if (inputEl) inputEl.classList.add('error-field');
 }
 
 function clearErrors() {
@@ -97,15 +84,19 @@ function clearErrors() {
     document.querySelectorAll('.error-field').forEach(el => el.classList.remove('error-field'));
 }
 
-/* --- MODAL DE SUCESSO --- */
+/* MODAL FUNCIONAL */
 function showModal(title, message, redirectUrl = null) {
     const modal = document.getElementById('success-modal');
-    if (!modal) return alert(message);
+    if (!modal) {
+        alert(message);
+        if (redirectUrl) window.location.href = redirectUrl;
+        return;
+    }
 
     document.getElementById('success-title').textContent = title;
     document.getElementById('success-message').textContent = message;
     
-    modal.style.display = 'flex';
+    modal.style.display = 'flex'; // Exibe o modal corrigido
 
     document.getElementById('close-modal').onclick = () => {
         modal.style.display = 'none';
@@ -113,14 +104,10 @@ function showModal(title, message, redirectUrl = null) {
     };
 }
 
-/* --- EVENTOS DA DOM --- */
 document.addEventListener('DOMContentLoaded', () => {
-
-    // 1. Controle de alternância entre Login e Cadastro
     const loginFormBox = document.getElementById('login-form');
     const registerFormBox = document.getElementById('register-form');
     
-    // Links para alternar
     document.getElementById('show-register')?.addEventListener('click', (e) => {
         e.preventDefault();
         loginFormBox.classList.add('d-none');
@@ -135,14 +122,13 @@ document.addEventListener('DOMContentLoaded', () => {
         clearErrors();
     });
 
-    // 2. Verifica se já está logado
+    // Verifica sessão ao entrar na página
     const currentUser = db.getCurrentUser();
     if (currentUser) {
-        // Se estiver na página de login, avisa e redireciona ou mostra estado
         showModal('Sessão Ativa', `Olá, ${currentUser.name}! Você já está conectado.`, 'index.html');
     }
 
-    // 3. LOGIN - SUBMIT
+    // LOGIN
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
         loginForm.addEventListener('submit', (e) => {
@@ -152,14 +138,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = document.getElementById('login-email').value.trim();
             const password = document.getElementById('login-password').value;
 
-            // Validação simples
             if (!email || !password) {
                 if (!email) showError('login-email', 'Informe seu e-mail');
                 if (!password) showError('login-password', 'Informe sua senha');
                 return;
             }
 
-            // Busca no "Banco de Dados"
             const user = db.authenticate(email, password);
 
             if (user) {
@@ -171,14 +155,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 4. CADASTRO - SUBMIT
+    // CADASTRO
     const registerForm = document.getElementById('registerForm');
     if (registerForm) {
         registerForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             clearErrors();
             
-            // UI Feedback de carregamento
             const btnSubmit = registerForm.querySelector('button[type="submit"]');
             const originalBtnText = btnSubmit.textContent;
             btnSubmit.textContent = 'Processando...';
@@ -190,25 +173,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             let hasError = false;
 
-            // Validações locais
-            if (name.length < 3) {
-                showError('register-name', 'Nome deve ter no mínimo 3 caracteres');
-                hasError = true;
-            }
-            if (!validateEmail(email)) {
-                showError('register-email', 'E-mail inválido');
-                hasError = true;
-            }
-            if (password.length < 6) {
-                showError('register-password', 'Senha deve ter no mínimo 6 caracteres');
-                hasError = true;
-            }
-
-            // Verifica duplicidade no LocalStorage
-            if (db.findUserByEmail(email)) {
-                showError('register-email', 'Este e-mail já está cadastrado');
-                hasError = true;
-            }
+            if (name.length < 3) { showError('register-name', 'Mínimo 3 caracteres'); hasError = true; }
+            if (!validateEmail(email)) { showError('register-email', 'E-mail inválido'); hasError = true; }
+            if (password.length < 6) { showError('register-password', 'Mínimo 6 caracteres'); hasError = true; }
+            if (db.findUserByEmail(email)) { showError('register-email', 'E-mail já cadastrado'); hasError = true; }
 
             if (hasError) {
                 btnSubmit.textContent = originalBtnText;
@@ -216,27 +184,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Buscamos dados extras da API para compor o objeto do usuário
             const apiData = await fetchUserDataFromAPI(name);
             
-            // Cria objeto do usuário unindo dados do form + dados da API
             const newUser = {
                 name,
                 email,
-                password, // Em produção, criptografaríamos isso
-                metadata: apiData // Dados vindos da API externa
+                password,
+                metadata: apiData
             };
 
-            // Salva no LocalStorage
             db.saveUser(newUser);
 
-            // Restaura botão
             btnSubmit.textContent = originalBtnText;
             btnSubmit.disabled = false;
 
             showModal('Cadastro Realizado', 'Sua conta foi criada! Faça login para continuar.', null);
             
-            // Troca para tela de login automaticamente
             registerForm.reset();
             registerFormBox.classList.add('d-none');
             loginFormBox.classList.remove('d-none');
