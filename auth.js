@@ -16,24 +16,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 3. Cria container do usuário
         const userDiv = document.createElement('div');
-        userDiv.className = 'd-flex align-items-center gap-3 ms-lg-3 mt-3 mt-lg-0';
+        
+        // Layout Flexbox: Alinha itens na horizontal e centraliza verticalmente
+        userDiv.className = 'd-flex align-items-center gap-3 mt-3 mt-lg-0';
         
         userDiv.innerHTML = `
-            <div class="text-white text-end lh-1 d-none d-lg-block">
+            <div class="text-white text-end lh-1 d-none d-lg-block ms-3">
                 <div class="fw-bold" style="font-size: 0.9rem;">Olá, ${firstName}</div>
                 <div class="small opacity-75" style="font-size: 0.75rem;">${user.email}</div>
             </div>
-            <div class="text-white d-lg-none mb-2">
+            
+            <div class="text-white d-lg-none mb-0 lh-1 ms-2 ps-1">
                 Olá, <strong>${firstName}</strong>
             </div>
+
             <button id="btn-menu-logout" class="btn btn-outline-warning btn-sm fw-bold px-3">
                 <i class="bi bi-box-arrow-right me-1"></i> Sair
             </button>
         `;
 
+        // Substitui o botão original pelo novo painel de usuário
         loginBtn.replaceWith(userDiv);
 
-        // 4. Evento de Logout com Modal Personalizado
+        // 4. Evento de Logout com Modal
         document.getElementById('btn-menu-logout').addEventListener('click', (e) => {
             e.preventDefault();
             showLogoutModal();
@@ -43,13 +48,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Função para criar e mostrar o modal de logout
 function showLogoutModal() {
-    // Verifica se já existe, senão cria
     let modal = document.getElementById('global-logout-modal');
     
     if (!modal) {
         modal = document.createElement('div');
         modal.id = 'global-logout-modal';
-        modal.className = 'success-message'; // Usa estilo global do style.css
+        modal.className = 'success-message'; 
         modal.style.display = 'none';
         
         modal.innerHTML = `
@@ -66,7 +70,6 @@ function showLogoutModal() {
         
         document.body.appendChild(modal);
 
-        // Ações dos botões
         document.getElementById('confirm-logout-btn').addEventListener('click', () => {
             localStorage.removeItem('resolucity_session_v1');
             window.location.href = 'index.html';
@@ -77,6 +80,5 @@ function showLogoutModal() {
         });
     }
 
-    // Exibe o modal
     modal.style.display = 'flex';
 }

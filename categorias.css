@@ -1,188 +1,90 @@
-/*VARIÁVEIS DO TEMA*/
-:root {
-  --amarelo: #ffcc00;
-  --preto: #0c0c0c;
-  --cinza: #f7f7f7;
-  --cinza-claro: #ececec;
-  --azul-escuro: #1e40af;
-}
+/* CATEGORIAS.CSS
+   Gerencia apenas o grid e os cards.
+   O fundo (cinza), fonte e header vêm do style.css 
+*/
 
-/*RESET / BASE GLOBAL*/
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: "Poppins", sans-serif;
-  background: var(--cinza);
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-/*HEADER SUPERIOR*/
-.top-header {
-  background: #fff;
-  font-size: 0.9rem;
-}
-
-.top-header i {
-  font-size: 1rem;
-}
-
-/*NAVBAR*/
-.navbar {
-  background-color: var(--preto) !important;
-  transition: background 0.3s ease;
-}
-
-.navbar.scrolled {
-  background-color: #000 !important;
-}
-
-.navbar-nav .nav-link {
-  color: #fff !important;
-  font-weight: 500;
-  margin-right: 15px;
-  transition: 0.3s;
-}
-
-.navbar-nav .nav-link:hover {
-  color: var(--amarelo) !important;
-}
-
-.btn-warning {
-  background-color: var(--amarelo) !important;
-  border: none;
-  transition: 0.3s;
-}
-
-.btn-warning:hover {
-  background-color: #e6b800 !important;
-  transform: scale(1.05);
-}
-
-/*TÍTULO*/
+/* TÍTULO DA PÁGINA */
 .title-op1 {
-  text-align: center;
-  margin: 3rem 0 2rem;
-  font-size: 2.6rem;
-  font-weight: 700;
   color: var(--preto);
+  font-weight: 700;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
 }
 
-/*GRID DE CATEGORIAS*/
+/* GRID DE CATEGORIAS */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1.5rem;
-  padding: 0 2rem 3rem;
+  padding: 0 1rem 3rem;
 }
 
-/* CARD */
+/* CARD INDIVIDUAL */
 .cat-card {
-  background: #fff;
-  border-radius: 14px;
-  padding: 1.7rem;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  background: #fff; /* Card branco */
+  border-radius: 12px;
+  padding: 2rem;
   text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-decoration: none; /* Remove sublinhado do link */
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  border: 1px solid rgba(0,0,0,0.05);
 }
 
+/* EFEITO HOVER */
 .cat-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+  transform: translateY(-8px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+  border-color: var(--amarelo); /* Borda amarela ao passar o mouse */
 }
 
+/* ÍCONE */
+.cat-card .icon {
+  font-size: 2.5rem;
+  color: var(--amarelo);
+  margin-bottom: 1rem;
+  transition: transform 0.3s;
+}
+
+.cat-card:hover .icon {
+  transform: scale(1.1);
+}
+
+/* TÍTULO DO CARD */
 .cat-card h2 {
-  font-size: 1.4rem;
+  font-size: 1.25rem;
   font-weight: 700;
   color: var(--preto);
-  margin-bottom: 0.7rem;
+  margin-bottom: 0.5rem;
 }
 
+/* TEXTO DO CARD */
 .cat-card p {
-  font-size: 0.95rem;
-  color: #555;
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.5;
+  margin: 0;
 }
 
-/* BOTÃO */
+/* BOTÃO NO FINAL (Ajuste de margem) */
 .center-btn {
   text-align: center;
   margin: 2rem 0 4rem;
 }
 
-.btn-relato {
-  padding: 15px 35px;
-  background-color: var(--azul-escuro);
-  border: none;
-  border-radius: 6px;
-  color: white;
-  font-size: 1.2rem;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.btn-relato:hover {
-  background-color: #162f85;
-  transform: translateY(-2px);
-}
-
-/*FOOTER*/
-.footer {
-  background-color: var(--preto);
-  padding: 3rem 0;
-  margin-top: auto;
-  color: #ccc;
-}
-
-.footer a {
-  color: #ddd;
-  text-decoration: none;
-  transition: 0.3s;
-}
-
-.footer a:hover {
-  color: var(--amarelo);
-}
-
-.footer-top {
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-}
-
-.footer-bottom {
-  font-size: 0.9rem;
-  opacity: 0.8;
-}
-
-/*RESPONSIVE*/
+/* RESPONSIVIDADE */
 @media (max-width: 768px) {
   .title-op1 {
     font-size: 2rem;
   }
-}
-
-.cat-card {
-    background: white;
-    padding: 25px;
-    border-radius: 12px;
-    text-align: center;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    transition: .3s;
-    text-decoration: none;
-    color: inherit;
-}
-
-.cat-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-.cat-card .icon {
-    font-size: 2.8rem;
-    color: #f1c40f;
-    margin-bottom: 10px;
+  
+  .grid {
+    grid-template-columns: repeat(auto-fit, minmax(100%, 1fr)); /* 1 por linha no celular */
+  }
 }
